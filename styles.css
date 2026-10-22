@@ -1,0 +1,336 @@
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap');
+
+:root {
+    --background: #090b10;
+    --surface: #141820;
+    --border: #2b303b;
+    --text: #f5f5f5;
+    --muted: #9ca3af;
+    --red: #ff4655;
+    --green: #41d69f;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: radial-gradient(circle at top, #1e2430, var(--background) 65%);
+    color: var(--text);
+    font-family: 'DM Sans', Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px 20px;
+}
+
+.container {
+    width: 100%;
+    max-width: 900px;
+    text-align: center;
+}
+
+.lee-image {
+    font-size: 90px;
+    margin-bottom: 20px;
+    filter: drop-shadow(0 0 30px rgba(255, 70, 85, 0.2));
+}
+
+h1 {
+    font-size: clamp(45px, 8vw, 85px);
+    font-weight: 800;
+    letter-spacing: -4px;
+    margin: 0 0 20px;
+}
+
+h1 span {
+    color: var(--red);
+}
+
+p {
+    color: var(--muted);
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    margin: 45px 0 20px;
+}
+
+button {
+    border: none;
+    border-radius: 12px;
+    padding: 18px 65px;
+    font-size: 20px;
+    font-family: inherit;
+    font-weight: 800;
+    cursor: pointer;
+    transition: transform 0.15s, background 0.15s;
+}
+
+#yesBtn {
+    background: var(--red);
+    color: white;
+}
+
+#yesBtn:hover {
+    background: #ff6571;
+    transform: translateY(-3px);
+}
+
+#yesBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+#noBtn {
+    background: #292e38;
+    color: white;
+    z-index: 10;
+}
+
+#noMessage {
+    color: var(--red);
+    font-weight: 700;
+    min-height: 32px;
+}
+
+.disclaimer {
+    font-size: 12px;
+    color: #626976;
+    margin-top: 45px;
+}
+
+#results,
+#verdict {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 35px;
+    margin-top: 35px;
+    text-align: center;
+    animation: appear 0.5s ease;
+}
+
+#results h2 {
+    color: var(--red);
+}
+
+#scanProgress {
+    width: 100%;
+    height: 16px;
+    accent-color: var(--red);
+    margin-top: 20px;
+}
+
+#verdict h2 {
+    font-size: 28px;
+    color: var(--green);
+}
+
+#verdict h3 {
+    font-size: 28px;
+    color: var(--red);
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin: 35px 0;
+}
+
+.stat-card {
+    background: #1c212b;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 25px 15px;
+}
+
+.stat-card .number {
+    display: block;
+    color: var(--red);
+    font-size: 42px;
+    font-weight: 800;
+}
+
+.stat-card .label {
+    display: block;
+    font-size: 12px;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-top: 10px;
+    letter-spacing: 1px;
+}
+
+.retirement-card {
+    background: #1c212b;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin: 12px 0;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: left;
+}
+
+.retirement-card strong {
+    font-size: 16px;
+}
+
+.compatibility {
+    color: var(--green);
+    font-weight: 800;
+}
+
+@keyframes appear {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 650px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .retirement-card {
+        gap: 15px;
+    }
+
+    button {
+        padding: 16px 35px;
+    }
+
+    h1 {
+        letter-spacing: -2px;
+    }
+}
+
+
+.retirement-section {
+    margin-top: 55px;
+    text-align: left;
+}
+
+.retirement-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+.retirement-header h3 {
+    margin: 0;
+    font-size: 25px;
+}
+
+.retirement-header p {
+    font-size: 14px;
+    margin: 8px 0;
+}
+
+.carousel-controls {
+    display: flex;
+    gap: 10px;
+}
+
+.carousel-controls button {
+    padding: 10px 16px;
+    font-size: 20px;
+    background: #242a35;
+    color: white;
+    border: 1px solid #383e49;
+    border-radius: 8px;
+}
+
+.carousel-controls button:hover {
+    background: #ff4655;
+}
+
+.retirement-carousel {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    overscroll-behavior-x: contain;
+}
+
+.retirement-carousel::-webkit-scrollbar {
+    display: none;
+}
+
+.home-card {
+    flex: 0 0 min(320px, 85%);
+    background: #1c212b;
+    border: 1px solid #303744;
+    border-radius: 16px;
+    overflow: hidden;
+    text-decoration: none;
+    color: white;
+    scroll-snap-align: start;
+    transition: border-color 0.2s, transform 0.2s;
+}
+
+.home-card:hover {
+    border-color: #ff4655;
+    transform: translateY(-4px);
+}
+
+.home-card img {
+    display: block;
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    background: #303744;
+}
+
+.home-info {
+    padding: 22px;
+}
+
+.home-match {
+    color: #41d69f;
+    font-weight: 800;
+    font-size: 11px;
+    letter-spacing: 1px;
+}
+
+.home-info h4 {
+    font-size: 21px;
+    margin: 14px 0 8px;
+}
+
+.home-info p {
+    font-size: 13px;
+    margin: 0 0 22px;
+}
+
+.maps-link {
+    color: #ff4655;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+}
+
+.carousel-hint {
+    text-align: center;
+    font-size: 12px;
+    letter-spacing: 2px;
+    margin-top: 20px;
+}
