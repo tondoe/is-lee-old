@@ -61,7 +61,7 @@ async function playStamp() {
     stampOverlay.hidden = false;
     stampOverlay.classList.add("is-stamping");
     container.classList.add("stamp-impact");
-    
+
     try {
         // Wait for browser to register active animations before inspecting them.
         await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
@@ -95,7 +95,7 @@ yesBtn.addEventListener("click", function () {
     noMessage.hidden = true;
     pageTitle.textContent = "ANALYZING LEE...";
     results.hidden = false;
-    
+
     const messages = [
         "Scanning birth certificate...", "Analyzing joint deterioration...",
         "Checking bingo attendance records...", "Calculating remaining youth...",
@@ -148,3 +148,76 @@ retirementCarousel.addEventListener("wheel", function (event) {
 }, { passive: false });
 
 retirementCarousel.addEventListener("pointerdown", () => { wheelTarget = null; });
+
+
+const downloadCertificate = document.getElementById("downloadCertificate");
+
+downloadCertificate.addEventListener("click", function () {
+
+    const canvas = document.createElement("canvas");
+    canvas.width = 1200;
+    canvas.height = 850;
+
+    const ctx = canvas.getContext("2d");
+
+    // Certificate background
+    ctx.fillStyle = "#f5eddc";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Decorative borders
+    ctx.strokeStyle = "#9b1c27";
+    ctx.lineWidth = 12;
+    ctx.strokeRect(35, 35, 1130, 780);
+
+    ctx.lineWidth = 3;
+    ctx.strokeRect(55, 55, 1090, 740);
+
+    // Text alignment
+    ctx.textAlign = "center";
+
+    // Main title
+    ctx.fillStyle = "#252525";
+    ctx.font = "bold 50px Georgia";
+    ctx.fillText("CERTIFICATE OF ADVANCED ELDERLINESS", 600, 165);
+
+    // Subtitle
+    ctx.font = "italic 28px Georgia";
+    ctx.fillText("This document hereby certifies that", 600, 245);
+
+    // Lee's name
+    ctx.fillStyle = "#9b1c27";
+    ctx.font = "bold 100px Georgia";
+    ctx.fillText("LEE", 600, 365);
+
+    // Certification details
+    ctx.fillStyle = "#252525";
+    ctx.font = "27px Georgia";
+    ctx.fillText("has been officially declared OLD beyond reasonable doubt.", 600, 435);
+
+    ctx.font = "bold 27px Georgia";
+    ctx.fillText("Biological Age: 87", 600, 505);
+    ctx.fillText("Youth Remaining: 0%", 600, 550);
+    ctx.fillText("Retirement Status: IMMEDIATE", 600, 595);
+
+    // Signature line
+    ctx.strokeStyle = "#252525";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(390, 690);
+    ctx.lineTo(810, 690);
+    ctx.stroke();
+
+    ctx.font = "italic 24px Georgia";
+    ctx.fillText("The Department of Elderly Affairs", 600, 730);
+
+    // Funny footer
+    ctx.font = "18px Georgia";
+    ctx.fillText("Officially unofficial. Approved by Lee's friends.", 600, 780);
+
+    // Download the image
+    const link = document.createElement("a");
+    link.download = "Lees-Retirement-Certificate.png";
+    link.href = canvas.toDataURL("image/png");
+    link.click();
+
+});

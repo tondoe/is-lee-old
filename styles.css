@@ -508,3 +508,29 @@ a:focus-visible,
         transition: none;
     }
 }
+
+
+.certificate-section {
+    margin-top: 50px;
+    padding: 30px 20px;
+    background: #1c212b;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    text-align: center;
+}
+
+.certificate-section h3 {
+    margin-top: 0;
+}
+
+#downloadCertificate {
+    background: var(--red);
+    color: white;
+    max-width: 100%;
+    margin-top: 15px;
+}
+
+#downloadCertificate:hover {
+    background: #ff6571;
+    transform: translateY(-3px);
+}
