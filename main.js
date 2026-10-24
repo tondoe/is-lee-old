@@ -11,12 +11,10 @@ const stampOverlay = document.getElementById("stampOverlay");
 const certifiedStamp = document.getElementById("certifiedStamp");
 const retirementCarousel = document.getElementById("retirementCarousel");
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-
 let attempts = 0;
 let investigationStarted = false;
 let wheelTarget = null;
 let wheelIdle;
-
 const noMessages = [
     "Nice try 💀", "Why are you defending him?", "Lee isn't paying you to do this.",
     "Bro remembers the invention of Wi-Fi.", "JUST ACCEPT THAT HE'S OLD 😭",
@@ -31,7 +29,6 @@ function keepNoButtonInViewport() {
     noBtn.style.left = Math.min(maxX, Math.max(margin, parseFloat(noBtn.style.left))) + "px";
     noBtn.style.top = Math.min(maxY, Math.max(margin, parseFloat(noBtn.style.top))) + "px";
 }
-
 function moveNoButton() {
     if (investigationStarted) return;
     const margin = 8;
@@ -43,25 +40,20 @@ function moveNoButton() {
     noMessage.textContent = noMessages[attempts % noMessages.length];
     attempts++;
 }
-
-
 noBtn.addEventListener("mouseenter", moveNoButton);
 noBtn.addEventListener("click", moveNoButton);
 window.addEventListener("resize", keepNoButtonInViewport);
 
 const stampReady = certifiedStamp.decode().then(() => true).catch(() => false);
-
 async function playStamp() {
     const loaded = await stampReady;
     if (!loaded) {
         console.warn("Stamp PNG could not load:", certifiedStamp.src);
         return;
     }
-
     stampOverlay.hidden = false;
     stampOverlay.classList.add("is-stamping");
     container.classList.add("stamp-impact");
-
     try {
         // Wait for browser to register active animations before inspecting them.
         await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
@@ -73,7 +65,6 @@ async function playStamp() {
         container.classList.remove("stamp-impact");
     }
 }
-
 function showVerdict() {
     results.hidden = true;
     verdict.hidden = false;
@@ -81,7 +72,6 @@ function showVerdict() {
     document.getElementById("verdictTitle").focus({ preventScroll: true });
     playStamp().catch(console.error);
 }
-
 yesBtn.addEventListener("click", function () {
     if (investigationStarted) return;
     investigationStarted = true;
@@ -95,16 +85,13 @@ yesBtn.addEventListener("click", function () {
     noMessage.hidden = true;
     pageTitle.textContent = "ANALYZING LEE...";
     results.hidden = false;
-
     const messages = [
         "Scanning birth certificate...", "Analyzing joint deterioration...",
         "Checking bingo attendance records...", "Calculating remaining youth...",
         "Locating retirement homes in St. Louis...", "Confirming ancient status..."
     ];
-
     let progress = 0;
     scanText.textContent = messages[0];
-
     const scan = setInterval(function () {
         progress += 5;
         scanProgress.value = progress;
@@ -116,7 +103,6 @@ yesBtn.addEventListener("click", function () {
         }
     }, 150);
 });
-
 function scrollHomes(direction) {
     wheelTarget = null;
     const card = retirementCarousel.querySelector(".home-card");
@@ -126,7 +112,6 @@ function scrollHomes(direction) {
         behavior: reducedMotion.matches ? "instant" : "smooth"
     });
 }
-
 document.getElementById("prevHome").addEventListener("click", () => scrollHomes(-1));
 document.getElementById("nextHome").addEventListener("click", () => scrollHomes(1));
 retirementCarousel.addEventListener("wheel", function (event) {
@@ -146,78 +131,107 @@ retirementCarousel.addEventListener("wheel", function (event) {
     clearTimeout(wheelIdle);
     wheelIdle = setTimeout(() => { wheelTarget = null; }, 200);
 }, { passive: false });
-
 retirementCarousel.addEventListener("pointerdown", () => { wheelTarget = null; });
 
 
-const downloadCertificate = document.getElementById("downloadCertificate");
+// Download a shareable PNG generated in-browser using the Canvas API.
+const certificateButton = document.getElementById("downloadCertificate");
+const certificateMessage = document.getElementById("certificateMessage");
 
-downloadCertificate.addEventListener("click", function () {
+certificateButton.addEventListener("click", async function () {
+    certificateButton.disabled = true;
+    certificateMessage.textContent = "Preparing Lee's official paperwork...";
 
-    const canvas = document.createElement("canvas");
-    canvas.width = 1200;
-    canvas.height = 850;
+    try {
+        // Wait for the decorative stamp to load; fall back gracefully if it fails.
+        let hasStamp = false;
+        try {
+            if (!certifiedStamp.complete) await certifiedStamp.decode();
+            hasStamp = certifiedStamp.naturalWidth > 0;
+        } catch (error) {
+            console.warn("Stamp not available for certificate:", error);
+        }
 
-    const ctx = canvas.getContext("2d");
+        const canvas = document.createElement("canvas");
+        canvas.width = 1600;
+        canvas.height = 1120;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) throw new Error("Canvas is unavailable.");
 
-    // Certificate background
-    ctx.fillStyle = "#f5eddc";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+        // Paper, borders and corner flourishes.
+        ctx.fillStyle = "#f7f0df";
+        ctx.fillRect(0, 0, 1600, 1120);
+        ctx.strokeStyle = "#8e2633";
+        ctx.lineWidth = 16;
+        ctx.strokeRect(42, 42, 1516, 1036);
+        ctx.lineWidth = 3;
+        ctx.strokeRect(67, 67, 1466, 986);
 
-    // Decorative borders
-    ctx.strokeStyle = "#9b1c27";
-    ctx.lineWidth = 12;
-    ctx.strokeRect(35, 35, 1130, 780);
+        ctx.textAlign = "center";
+        ctx.fillStyle = "#252323";
+        ctx.font = "bold 51px Georgia, serif";
+        ctx.fillText("CERTIFICATE OF ADVANCED ELDERLINESS", 800, 198);
 
-    ctx.lineWidth = 3;
-    ctx.strokeRect(55, 55, 1090, 740);
+        ctx.font = "italic 32px Georgia, serif";
+        ctx.fillText("This highly unofficial document hereby certifies that", 800, 272);
 
-    // Text alignment
-    ctx.textAlign = "center";
+        ctx.fillStyle = "#8e2633";
+        ctx.font = "bold 132px Georgia, serif";
+        ctx.fillText("LEE", 800, 424);
 
-    // Main title
-    ctx.fillStyle = "#252525";
-    ctx.font = "bold 50px Georgia";
-    ctx.fillText("CERTIFICATE OF ADVANCED ELDERLINESS", 600, 165);
+        ctx.fillStyle = "#252323";
+        ctx.font = "31px Georgia, serif";
+        ctx.fillText("has been declared OLD beyond reasonable doubt.", 800, 486);
 
-    // Subtitle
-    ctx.font = "italic 28px Georgia";
-    ctx.fillText("This document hereby certifies that", 600, 245);
+        ctx.font = "bold 30px Georgia, serif";
+        ctx.fillText("Biological Age: 87", 800, 565);
+        ctx.fillText("Youth Remaining: 0%", 800, 619);
+        ctx.fillText("Fossil Probability: 100%", 800, 673);
+        ctx.fillText("Retirement Status: IMMEDIATE", 800, 727);
 
-    // Lee's name
-    ctx.fillStyle = "#9b1c27";
-    ctx.font = "bold 100px Georgia";
-    ctx.fillText("LEE", 600, 365);
+        // Decorative stamp is deliberately small so it never obscures the text.
+        if (hasStamp) {
+            ctx.save();
+            ctx.translate(1302, 811);
+            ctx.rotate(-0.17);
+            const maxWidth = 305;
+            const maxHeight = 215;
+            const scale = Math.min(maxWidth / certifiedStamp.naturalWidth, maxHeight / certifiedStamp.naturalHeight);
+            const stampWidth = certifiedStamp.naturalWidth * scale;
+            const stampHeight = certifiedStamp.naturalHeight * scale;
+            ctx.globalAlpha = 0.88;
+            ctx.drawImage(certifiedStamp, -stampWidth / 2, -stampHeight / 2, stampWidth, stampHeight);
+            ctx.restore();
+        }
 
-    // Certification details
-    ctx.fillStyle = "#252525";
-    ctx.font = "27px Georgia";
-    ctx.fillText("has been officially declared OLD beyond reasonable doubt.", 600, 435);
+        ctx.strokeStyle = "#252323";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(480, 885);
+        ctx.lineTo(1120, 885);
+        ctx.stroke();
+        ctx.textAlign = "center";
+        ctx.fillStyle = "#252323";
+        ctx.font = "italic 27px Georgia, serif";
+        ctx.fillText("The Completely Unofficial Department of Elderly Affairs", 800, 925);
+        ctx.font = "22px Georgia, serif";
+        ctx.fillText("Approved by Lee's friends. No medical or scientific validity whatsoever.", 800, 1010);
 
-    ctx.font = "bold 27px Georgia";
-    ctx.fillText("Biological Age: 87", 600, 505);
-    ctx.fillText("Youth Remaining: 0%", 600, 550);
-    ctx.fillText("Retirement Status: IMMEDIATE", 600, 595);
-
-    // Signature line
-    ctx.strokeStyle = "#252525";
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.moveTo(390, 690);
-    ctx.lineTo(810, 690);
-    ctx.stroke();
-
-    ctx.font = "italic 24px Georgia";
-    ctx.fillText("The Department of Elderly Affairs", 600, 730);
-
-    // Funny footer
-    ctx.font = "18px Georgia";
-    ctx.fillText("Officially unofficial. Approved by Lee's friends.", 600, 780);
-
-    // Download the image
-    const link = document.createElement("a");
-    link.download = "Lees-Retirement-Certificate.png";
-    link.href = canvas.toDataURL("image/png");
-    link.click();
-
+        const blob = await new Promise(resolve => canvas.toBlob(resolve, "image/png"));
+        if (!blob) throw new Error("PNG export failed.");
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "Lees-Official-Retirement-Certificate.png";
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+        certificateMessage.textContent = "Certificate generated! Check your downloads. 👴";
+    } catch (error) {
+        console.error("Certificate download failed:", error);
+        certificateMessage.textContent = "Couldn't make the PNG. Check the browser console.";
+    } finally {
+        certificateButton.disabled = false;
+    }
 });
